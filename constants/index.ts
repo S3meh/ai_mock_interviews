@@ -228,4 +228,249 @@ export const dummyInterviews: Interview[] = [
     createdAt: "2024-03-14T15:30:00Z",
   },
 ];
+export const generator ={
+  "name": "Prep_Wise",
+  "nodes": [
+    {
+      "name": "introduction",
+      "type": "conversation",
+      "isStart": true,
+      "metadata": {
+        "position": {
+          "x": -754.383720270811,
+          "y": -253.80412020701857
+        }
+      },
+      "prompt": "Greet the user and help them create a new AI Interviewer.",
+      "model": {
+        "model": "gpt-4o",
+        "provider": "openai",
+        "maxTokens": 1000,
+        "temperature": 0.7
+      },
+      "voice": {
+        "voiceId": "Elliot",
+        "provider": "vapi"
+      },
+      "variableExtractionPlan": {
+        "output": [
+          {
+            "enum": [],
+            "type": "string",
+            "title": "role",
+            "description": "What role would you like to train  for? "
+          },
+          {
+            "enum": [
+              "behavioral",
+              "technical",
+              "mixed"
+            ],
+            "type": "string",
+            "title": "type",
+            "description": "Are you aiming for technical, behavioral or mixed interview?"
+          },
+          {
+            "enum": [
+              "entry",
+              "mid",
+              "senior"
+            ],
+            "type": "string",
+            "title": "level",
+            "description": "The job experience level"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "techstack",
+            "description": "A list of technologies to cover during the job interview"
+          },
+          {
+            "enum": [],
+            "type": "string",
+            "title": "amount",
+            "description": "How many questions would you like me to prepare for you?"
+          }
+        ]
+      },
+      "messagePlan": {
+        "firstMessage": ""
+      }
+    },
+    {
+      "name": "conversation_1748713557120",
+      "type": "conversation",
+      "metadata": {
+        "position": {
+          "x": -544.404799542087,
+          "y": 13.373419846964879
+        }
+      },
+      "prompt": "Say that the Interview will be generated shortly.",
+      "model": {
+        "model": "gpt-4o",
+        "provider": "openai",
+        "maxTokens": 1000,
+        "temperature": 0.7
+      },
+      "voice": {
+        "voiceId": "Kylie",
+        "provider": "vapi"
+      },
+      "messagePlan": {
+        "firstMessage": ""
+      }
+    },
+    {
+      "name": "API Request",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -754.383720270811,
+          "y": 246.19587979298143
+        }
+      },
+      "tool": {
+        "url": `${process.env.NEXT_PUBLIC_BASE_URL}/api/vapi/generate`,
+        "body": {
+          "type": "object",
+          "required": [
+            "role",
+            "type",
+            "level",
+            "amount",
+            "techstack",
+            "userid"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "value": "{{role}}",
+              "description": ""
+            },
+            "type": {
+              "enum": [
+                "behavioral",
+                "technical",
+                "mixed"
+              ],
+              "type": "string",
+              "value": "{{type}}",
+              "description": ""
+            },
+            "level": {
+              "enum": [
+                "entry",
+                "mid",
+                "senior"
+              ],
+              "type": "string",
+              "value": "{{level}}",
+              "description": ""
+            },
+            "amount": {
+              "type": "string",
+              "value": "{{amount}}",
+              "description": ""
+            },
+            "userid": {
+              "type": "string",
+              "value": "{{userid}}",
+              "description": ""
+            },
+            "techstack": {
+              "type": "string",
+              "value": "{{techstack}}",
+              "description": ""
+            }
+          }
+        },
+        "type": "apiRequest",
+        "method": "POST",
+        "function": {
+          "name": "untitled_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "hangup_1748714478699",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -691.8318320293014,
+          "y": 824.679178128249
+        }
+      },
+      "tool": {
+        "type": "endCall"
+      }
+    },
+    {
+      "name": "conversation_1748714871720",
+      "type": "conversation",
+      "metadata": {
+        "position": {
+          "x": -754.383720270811,
+          "y": 496.19587979298143
+        }
+      },
+      "prompt": "Thank the user for the conversation and inform them that the interview has been generated successfully.",
+      "model": {
+        "model": "gpt-4o",
+        "provider": "openai",
+        "maxTokens": 1000,
+        "temperature": 0.7
+      },
+      "voice": {
+        "voiceId": "Kylie",
+        "provider": "vapi"
+      },
+      "messagePlan": {
+        "firstMessage": ""
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "introduction",
+      "to": "conversation_1748713557120",
+      "condition": {
+        "type": "ai",
+        "prompt": "If user provided all the required variables."
+      }
+    },
+    {
+      "from": "conversation_1748713557120",
+      "to": "API Request",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    },
+    {
+      "from": "conversation_1748714871720",
+      "to": "hangup_1748714478699",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    },
+    {
+      "from": "API Request",
+      "to": "conversation_1748714871720",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    }
+  ],
+  "globalPrompt": "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters."
+}
+
  
