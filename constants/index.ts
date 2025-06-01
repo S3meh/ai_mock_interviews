@@ -241,7 +241,7 @@ export const generator ={
           "y": -253.80412020701857
         }
       },
-      "prompt": "Greet the user and help them create a new AI Interviewer.",
+      "prompt": "Say \"Hello! {{username}}\" and help them create a new AI Interviewer.",
       "model": {
         "model": "gpt-4o",
         "provider": "openai",
@@ -249,7 +249,7 @@ export const generator ={
         "temperature": 0.7
       },
       "voice": {
-        "voiceId": "Elliot",
+        "voiceId": "Kylie",
         "provider": "vapi"
       },
       "variableExtractionPlan": {
@@ -408,7 +408,16 @@ export const generator ={
         }
       },
       "tool": {
-        "type": "endCall"
+        "type": "endCall",
+        "function": {
+          "name": "untitled_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          }
+        },
+        "messages": []
       }
     },
     {
@@ -458,7 +467,7 @@ export const generator ={
       "to": "hangup_1748714478699",
       "condition": {
         "type": "ai",
-        "prompt": ""
+        "prompt": "if user say thank you"
       }
     },
     {
@@ -472,5 +481,3 @@ export const generator ={
   ],
   "globalPrompt": "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters."
 }
-
- 

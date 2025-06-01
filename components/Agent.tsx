@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import {vapi} from '@/lib/vapi.sdk';
 import { generator } from '@/constants';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '@/firebase/admin';
 enum CallStatus{
     INACTIVE = 'INACTIVE',
     CONNECTING = 'CONNECTING',
@@ -74,19 +76,6 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
     if(callStatus === CallStatus.FINISHED) router.push('/');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[messages, callStatus, type, userId]);
- /*  const handleCall = async () =>{
-    setCallStatus(CallStatus.CONNECTING);
-    try {
-  await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
-    variableValues: {
-      username: userName,
-      userid: userId,
-    }
-  });
-} catch (error) {
-  console.error("Vapi start failed:", error);
-}
-  }; */
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
 
@@ -112,6 +101,23 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   };
   const latestMessage = messages[messages.length - 1]?.content;
   const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
+/* const onCallEnd = async () => {
+  setCallStatus(CallStatus.FINISHED);
+
+  try {
+    await addDoc(collection(db, 'interviews'), {
+      userId,
+      userName,
+      type,
+      messages,
+      timestamp: new Date()
+    });
+    console.log("Interview saved to Firestore.");
+  } catch (error) {
+    console.error("Failed to save interview:", error);
+  }
+}; */
+
 
     
   return (
