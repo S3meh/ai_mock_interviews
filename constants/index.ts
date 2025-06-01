@@ -332,7 +332,7 @@ export const generator ={
         }
       },
       "tool": {
-        "url": `${process.env.NEXT_PUBLIC_BASE_URL}/api/vapi/generate`,
+        "url":`${process.env.NEXT_PUBLIC_BASE_URL}/api/vapi/generate`,
         "body": {
           "type": "object",
           "required": [
@@ -459,7 +459,7 @@ export const generator ={
       "to": "API Request",
       "condition": {
         "type": "ai",
-        "prompt": ""
+        "prompt": "if user say okay"
       }
     },
     {
