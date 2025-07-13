@@ -6,7 +6,7 @@ import React from 'react'
 import InterviewCard from '@/components/InterviewCard';
 import {  getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/general.action';
 import { getCurrentUser } from '@/lib/actions/auth.action';
-
+export const dynamic = 'force-dynamic';
 const page = async () => {
   const user = await getCurrentUser();
   const [ userInterviews, latestInterviews] = await Promise.all([
