@@ -71,23 +71,25 @@ export async function setSessionCookie(idToken : string){
         sameSite: 'lax',
     })
 }
-export async function getCurrentUser(): Promise<User | null>{
-    const cookieStore = await cookies();
+export async function getCurrentUser(): Promise<User | null> {
+    const cookieStore = cookies(); // ✅ Remove `await`
     const sessionCookie = cookieStore.get('session')?.value;
-    if(!sessionCookie) return null;
+    if (!sessionCookie) return null;
+  
     try {
-        const decodeClaims = await auth.verifySessionCookie(sessionCookie, true);
-        const userRecord = await db.collection('users').doc(decodeClaims.uid).get();
-        if(!userRecord.exists) return null;
-        return{
-            ... userRecord.data(),
-            id: userRecord.id,
-        } as User;
+      const decodeClaims = await auth.verifySessionCookie(sessionCookie, true);
+      const userRecord = await db.collection('users').doc(decodeClaims.uid).get();
+      if (!userRecord.exists) return null;
+  
+      return {
+        ...userRecord.data(),
+        id: userRecord.id,
+      } as User;
     } catch (e) {
-        console.log(e);
-        return null;
+      console.log('getCurrentUser error:', e);
+      return null;
     }
-}
+  }
 export async function isAuthenticated() {
     const user = await getCurrentUser();
     return !!user;
